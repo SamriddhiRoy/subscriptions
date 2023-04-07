@@ -1,0 +1,62 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+struct Newspaper {
+    string name;
+    float price[7];
+};
+
+int main() {
+    // Initialize newspaper prices
+    Newspaper TOI = {"TOI", {3, 3, 3, 3, 3, 5, 6}};
+    Newspaper Hindu = {"Hindu", {2.5, 2.5, 2.5, 2.5, 2.5, 4, 4}};
+    Newspaper ET = {"ET", {4, 4, 4, 4, 4, 4, 10}};
+    Newspaper BM = {"BM", {1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.5}};
+    Newspaper HT = {"HT", {2, 2, 2, 2, 2, 4, 4}};
+
+    // Create a vector of newspapers
+    vector<Newspaper> newspapers = {TOI, Hindu, ET, BM, HT};
+
+    // Take input from user
+    float weeklyBudget;
+    cout << "Enter weekly budget: ";
+    cin >> weeklyBudget;
+
+    // Find all possible combinations of newspapers within the budget
+    vector<vector<string>> combinations;
+    for (int i = 0; i < newspapers.size(); i++) {
+        for (int j = i+1; j < newspapers.size(); j++) {
+            float totalPrice = 0;
+            bool withinBudget = true;
+            vector<string> combo = {newspapers[i].name, newspapers[j].name};
+            for (int k = 0; k < 7; k++) {
+                totalPrice += newspapers[i].price[k] + newspapers[j].price[k];
+                if (totalPrice > weeklyBudget) {
+                    withinBudget = false;
+                    break;
+                }
+            }
+            if (withinBudget) {
+                combinations.push_back(combo);
+            }
+        }
+    }
+
+    // Output all possible combinations
+    if (combinations.size() > 0) {
+        cout << "Possible newspaper combinations within budget: " << endl;
+        for (auto combo : combinations) {
+            for (auto name : combo) {
+                cout << name << " ";
+            }
+            cout << endl;
+        }
+    } else {
+        cout << "No newspaper combinations found within budget." << endl;
+    }
+
+    return 0;
+}
